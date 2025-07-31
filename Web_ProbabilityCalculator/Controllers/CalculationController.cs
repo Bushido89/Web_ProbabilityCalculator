@@ -17,7 +17,7 @@ namespace Web_ProbabilityCalculator.Controllers
 		public CalculationResult GetCalculationResult([FromBody] CalculationResultReq req) => service.GetCalculationResult(req.CalculationName, req.QueryParameters);
 
 		//Marked as async to simulate when this would be either a cache hit or a database call
-		[HttpGet]
+		[HttpGet("GetCalculations")]
 		public async Task<List<Calculation>> GetCalculations() => await service.GetCalculations();
 	}
 }

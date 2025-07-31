@@ -1,4 +1,5 @@
-﻿using Web_ProbabilityCalculator.Models.ViewModels;
+﻿using System.Text.Json.Serialization;
+using Web_ProbabilityCalculator.Models.ViewModels;
 
 namespace Web_ProbabilityCalculator.Models.CoreModels
 {
@@ -9,6 +10,8 @@ namespace Web_ProbabilityCalculator.Models.CoreModels
 		public Dictionary<string, CalculationParameter> CalculationParameters { get; set; } = new();
 
 		public delegate CalculationResult CalculationDelegate(Dictionary<string, double> inputs, Calculation calculation);
+		
+		[JsonIgnore]
 		public CalculationDelegate CalculationFunc { get; set; }
 
 		public CalculationResult CheckParameters(Dictionary<string, double> queryParameters)

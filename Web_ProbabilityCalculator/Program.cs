@@ -1,5 +1,7 @@
 using Serilog;
 using System.Reflection;
+using Web_ProbabilityCalculator;
+using Web_ProbabilityCalculator.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +37,8 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-//builder.Services.AddSingleton
+var conf = builder.Configuration.Get<AppSettings>();
+builder.Services.AddSingleton<ICalculationService>(new CalculationService(conf!));
 
 var app = builder.Build();
 
