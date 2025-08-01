@@ -1,4 +1,6 @@
-﻿using Web_ProbabilityCalculator.Dal;
+﻿using Serilog;
+using System.Text.Json;
+using Web_ProbabilityCalculator.Dal;
 using Web_ProbabilityCalculator.Models.CoreModels;
 using Web_ProbabilityCalculator.Models.ViewModels;
 
@@ -23,12 +25,16 @@ namespace Web_ProbabilityCalculator.Services
 
 		public CalculationResult GetCalculationResult(string calculationName, Dictionary<string, double> queryParameters)
 		{
+			var reqGuid = Guid.NewGuid();
+			Log.Debug("Incoming calculation requestId:{guid} for {calc}: params:{params}", reqGuid, calculationName, JsonSerializer.Serialize(queryParameters));
 			var calc = calculationDao.Calculations.FirstOrDefault(x => x.Name == calculationName);
 			if (calc == null)
 			{
 				return CalculationParameter.AssignFalure("Calculation name does not exist");
 			}
-			return calc.CalculationFunc(queryParameters, calc);
+			var result = calc.CalculationFunc(queryParameters, calc);
+			Log.Debug("Complete calculation requestId:{guid} for {calc}: params:{params}", reqGuid, calculationName, JsonSerializer.Serialize(result));
+			return result;
 		}
 	}
 }

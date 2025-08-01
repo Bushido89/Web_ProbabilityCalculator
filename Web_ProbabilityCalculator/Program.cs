@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Setup Serilog
 var loggingOutputTemplate = "{Timestamp:HH:mm:ss.fff zzz} [{Level}] {Message}{NewLine}{Exception}";
-var logPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "Logs", "WebService_DeviceMessageCommsLayer_.log");
+var logPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "Logs", "Web_ProbabilityCalculator_.log");
 
 Log.Logger = new LoggerConfiguration()
 	.MinimumLevel.Debug()
