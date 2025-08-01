@@ -18,13 +18,6 @@
             "environmentVariables": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             }
-        },
-        "ReactDevServer": {
-            "commandName": "Executable",
-            "executablePath": "cmd.exe",
-            "workingDirectory": "../Web_ProbabilityCalculator/ClientApp",
-            "commandLineArgs": "/c start-client.cmd"
         }
-
     }
 }

@@ -33,8 +33,9 @@ namespace Web_ProbabilityCalculator.Dal
 						Name = "CombinedWith",
 						CalculationParameters =
 						{
-							{ "A", new () },
-							{ "B", new () }
+							{ "A", new () { Name = "A" } },
+							{ "B", new () { Name = "B" } }
+
 						},
 						CalculationFunc = (queryParams, calc) =>
 						{
@@ -47,8 +48,8 @@ namespace Web_ProbabilityCalculator.Dal
 						Name = "Either",
 						CalculationParameters =
 						{
-							{ "A", new () },
-							{ "B", new () }
+							{ "A", new () { Name = "A" } },
+							{ "B", new () { Name = "B" } }
 						},
 						CalculationFunc = (param, calc) =>
 						{

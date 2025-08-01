@@ -10,14 +10,13 @@ namespace Web_ProbabilityCalculator.Controllers
 		private ICalculationService service;
 		public CalculationController(ICalculationService service)
 		{
-			service = service;
+			this.service = service;
 		}
 
 		[HttpPost]
 		public CalculationResult GetCalculationResult([FromBody] CalculationResultReq req) => service.GetCalculationResult(req.CalculationName, req.QueryParameters);
 
 		//Marked as async to simulate when this would be either a cache hit or a database call
-		[HttpGet("GetCalculations")]
 		public async Task<List<Calculation>> GetCalculations() => await service.GetCalculations();
 	}
 }

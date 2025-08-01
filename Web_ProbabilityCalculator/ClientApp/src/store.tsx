@@ -1,7 +1,7 @@
 
 export type CalculationResultReq = {
 	calculationName: string;
-	queryParameters: Record<string, any>;
+	queryParameters: { [key: string]: number };
 }
 
 export type CalculationResult = {
@@ -19,26 +19,14 @@ export type CalculationParameter = {
 
 export type Calculation = {
 	name: string;
-	calculationParameters: Record<string, CalculationParameter>;
+	calculationParameters: { [key: string]: CalculationParameter };
 
 }
 
 const API_BASE = "/api/calculation";
 
 export async function getCalculationResult(req: CalculationResultReq): Promise<CalculationResult> {
-	const response = await fetch(`${API_BASE}/GetCalculationResult`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify(req),
-	});
-
-	if (!response.ok) {
-		throw new Error("Failed to fetch calculation result");
-	}
-
-	return response.json();
+	return await apiPost(`${API_BASE}/GetCalculationResult`, req);
 }
 
 export async function getCalculations(): Promise<Calculation[]> {

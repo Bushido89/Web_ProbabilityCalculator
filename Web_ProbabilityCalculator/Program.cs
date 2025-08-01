@@ -3,57 +3,58 @@ using System.Reflection;
 using Web_ProbabilityCalculator;
 using Web_ProbabilityCalculator.Services;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
+// Setup Serilog
 var loggingOutputTemplate = "{Timestamp:HH:mm:ss.fff zzz} [{Level}] {Message}{NewLine}{Exception}";
+var logPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "Logs", "WebService_DeviceMessageCommsLayer_.log");
+
 Log.Logger = new LoggerConfiguration()
 	.MinimumLevel.Debug()
-	.WriteTo.Console(
-		outputTemplate: loggingOutputTemplate)
+	.WriteTo.Console(outputTemplate: loggingOutputTemplate)
 	.WriteTo.File(
-		$@"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\Logs\WebService_DeviceMessageCommsLayer_.log",
+		logPath,
 		rollingInterval: RollingInterval.Day,
 		outputTemplate: loggingOutputTemplate,
 		flushToDiskInterval: TimeSpan.FromSeconds(1),
-		buffered: false
-	).CreateLogger();
+		buffered: false)
+	.CreateLogger();
+
 Log.Debug("Application initialization!");
 
-
+// CORS
 builder.Services.AddCors(options =>
 {
-	options.AddPolicy("AllowReactApp",
-		policy => policy.WithOrigins("http://localhost:5173")
-			.AllowAnyHeader()
-			.AllowAnyMethod());
+	options.AddPolicy("AllowReactApp", policy =>
+		policy.WithOrigins("https://localhost:7115") // Replace with your actual origin
+			  .AllowAnyHeader()
+			  .AllowAnyMethod());
 });
 
-
-
-
-// Add services to the container.
-
+// Add services
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+// Load full config object
 var conf = builder.Configuration.Get<AppSettings>();
 builder.Services.AddSingleton<ICalculationService>(new CalculationService(conf!));
 
 var app = builder.Build();
 
+app.MapControllerRoute(
+	name: "default",
+	pattern: "api/{controller}/{action=Index}");
+
 app.UseCors("AllowReactApp");
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+	app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
